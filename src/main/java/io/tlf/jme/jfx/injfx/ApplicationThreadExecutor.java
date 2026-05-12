@@ -2,7 +2,8 @@ package io.tlf.jme.jfx.injfx;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * The executor for executing tasks in application thread.
@@ -20,8 +21,7 @@ public class ApplicationThreadExecutor {
     /**
      * The list of waiting tasks.
      */
-    // private final ConcurrentArray<Runnable> waitTasks;
-    private final CopyOnWriteArrayList<Runnable> waitTasks;
+    private final Queue<Runnable> waitTasks;
 
     /**
      * The list of tasks to execute.
@@ -30,9 +30,7 @@ public class ApplicationThreadExecutor {
     private final List<Runnable> execute;
 
     private ApplicationThreadExecutor() {
-        // this.waitTasks = ArrayFactory.newConcurrentAtomicARSWLockArray(Runnable.class);
-        // this.execute = ArrayFactory.newArray(Runnable.class);
-        this.waitTasks = new CopyOnWriteArrayList<>();
+        this.waitTasks = new ConcurrentLinkedQueue<>();
         this.execute = new ArrayList<>();
     }
 
@@ -42,7 +40,6 @@ public class ApplicationThreadExecutor {
      * @param task the new task.
      */
     public void addToExecute(Runnable task) {
-        // ArrayUtils.runInWriteLock(waitTasks, task, Array::add);
         waitTasks.add(task);
     }
 
@@ -55,9 +52,10 @@ public class ApplicationThreadExecutor {
             return;
         }
 
-        // ArrayUtils.runInWriteLock(waitTasks, execute, ArrayUtils::move);
-
-        //long stamp
+        Runnable task;
+        while ((task = waitTasks.poll()) != null) {
+            execute.add(task);
+        }
 
         try {
             execute.forEach(Runnable::run);
