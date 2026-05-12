@@ -6,7 +6,7 @@ import com.sun.javafx.embed.EmbeddedStageInterface;
 
 import java.util.logging.Logger;
 
-import static io.tlf.jme.jfx.injme.util.JmeWindowUtils.*;
+import io.tlf.jme.jfx.injme.util.JmeWindowUtils;
 
 /**
  * The implementation of the {@link Picture} to represent javaFX UI Scene.
@@ -48,15 +48,15 @@ public class JavaFxPicture extends Picture {
                 return;
             }
 
-            final int windowWidth = getWidth(jmeContext);
-            final int windowHeight = getHeight(jmeContext);
+            final int windowWidth = JmeWindowUtils.getWidth(jmeContext);
+            final int windowHeight = JmeWindowUtils.getHeight(jmeContext);
 
             if (windowWidth != container.getSceneWidth() || windowHeight != container.getSceneHeight()) {
                 container.fitSceneToWindowSize();
             }
 
-            final int currentX = getX(jmeContext);
-            final int currentY = getY(jmeContext);
+            final int currentX = JmeWindowUtils.getX(jmeContext);
+            final int currentY = JmeWindowUtils.getY(jmeContext);
 
             if (container.getPositionX() != currentX || container.getPositionY() != currentY) {
                 container.move(currentX, currentY);

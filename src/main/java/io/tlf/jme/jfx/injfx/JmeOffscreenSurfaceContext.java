@@ -133,6 +133,11 @@ public class JmeOffscreenSurfaceContext implements JmeContext {
     }
 
     @Override
+    public SystemListener getSystemListener() {
+        return getBackgroundContext().getSystemListener();
+    }
+
+    @Override
     public void setSystemListener(SystemListener listener) {
         getBackgroundContext().setSystemListener(listener);
     }
@@ -217,5 +222,35 @@ public class JmeOffscreenSurfaceContext implements JmeContext {
 
         // destroy wrapped context
         backgroundContext.destroy(waitFor);
+    }
+
+    @Override
+    public int getFramebufferHeight() {
+        return getHeight();
+    }
+
+    @Override
+    public int getFramebufferWidth() {
+        return getWidth();
+    }
+
+    @Override
+    public int getWindowXPosition() {
+        return 0;
+    }
+
+    @Override
+    public int getWindowYPosition() {
+        return 0;
+    }
+
+    @Override
+    public Displays getDisplays() {
+        return getBackgroundContext().getDisplays();
+    }
+
+    @Override
+    public int getPrimaryDisplay() {
+        return getBackgroundContext().getPrimaryDisplay();
     }
 }
